@@ -9,8 +9,13 @@ DISCORD_TOKEN = os.getenv("DISCORD_TOKEN")
 OPENAI_TOKEN = os.getenv("OPENAI_TOKEN")
 openai.api_key = OPENAI_TOKEN
 
+"""
+Converts natural language to an SQLite query via the OpenAI API
 
-def convert(query):
+:param query : The natural language query to convert.
+:return : SQLite SELECT query representing the natural language query provided.
+"""
+def convert(query:str) -> str:
     # TODO input validation, sanitization
     response = openai.Completion.create(
         model="text-davinci-003",
@@ -32,9 +37,11 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="?", intents=intents)
 
-
+"""
+NLQ Discord bot command
+"""
 @bot.command(name="nlq")
-async def nlq(ctx, *args):
+async def nlq(ctx, *args : list[str]) -> None:
     query = " ".join(args)
     await ctx.send(convert(query))
 
